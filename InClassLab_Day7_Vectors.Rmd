@@ -1,6 +1,6 @@
 ---
 title: "In Class Lab"
-author: "Dr. Shoemaker"
+author: "John Nobles"
 date: "DATA 2401"
 output: html_document
 ---
@@ -20,6 +20,15 @@ knitr::opts_chunk$set(echo = TRUE)
 4. Create a vector `m` that contains the numbers 10 to 1 (in that order), in two different ways, neither of which is just typing "10, 9 , 8 ...".  Hint: use one of the helper functions we learned.
 5. Subtract `m` FROM `n`. Note the recycling!
 
+``` {r set-1}
+n <- 10:49
+length(n)
+n + 1
+m <- 10:1
+m <- seq(10, 1)
+m - n
+```
+
 ### Set 2 
 
 1. Use the `seq()` function to produce a range of numbers from -5 to 10 in `0.1` increments. Store it in a variable `x_range`
@@ -28,6 +37,11 @@ knitr::opts_chunk$set(echo = TRUE)
      + the x vector goes in the first argument, the y vector goes in the second argument
      + You'll need to add the argument `type = "l"` for a line. NOTE: That is a lower case "L", not a 1. 
 
+``` {r set-2}
+x_range <- seq(-5, 10, .1)
+sin_wave <- sin(x_range)
+plot(x_range, sin_wave, type="l", col="red")
+```
 
 ### Set 3 
 
@@ -39,12 +53,25 @@ knitr::opts_chunk$set(echo = TRUE)
 6. Use indexing to create a new vector that contains the first 3 elements and last 3 elements of your combined vector. 
 7. Bonus/extra: do the above in a way that would work no matter how long the vector is (as long as it's longer than 2 elements)
 
+``` {r set-3}
+first_nums <- 40:50
+next_nums <- seq(51, 60)
+combo <- c(first_nums, next_nums)
+combo[7]
+combo[5:8]
+new_vector <- c(combo[1:3], combo[19:21])
+new_vector
+```
+
 ## In Class Activity
 
 1. Write a function to simulate rolling a 6-sided die and returns the result.
 
 ```{r}
-
+roll_dice <- function() {
+  return(sample(c(1:6), 1))
+}
+roll_dice()
 ```
 
 
@@ -52,7 +79,13 @@ knitr::opts_chunk$set(echo = TRUE)
 1. Write a function to simulate rolling 2 6-sided dice that returns the sum of the rolls. 
 
 ```{r}
-
+roll_dice <- function() {
+  return(sample(c(1:6), 1))
+}
+roll_2dice <- function() {
+  return(sum(roll_dice(), roll_dice()))
+}
+roll_2dice()
 
 ```
 
@@ -61,15 +94,53 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 # Your one-roll function goes here
-
+roll_diceA <- function() {
+  return(sample(c(1:6), 1))
+}
+roll_diceB <- function() {
+  return(sample(c(1:6), 1))
+}
+max_with_name <- function() {
+  a <- roll_diceA()
+  b <- roll_diceB()
+  name_a <- "Adam"
+  name_b <- "John"
+  if (a == b) {
+    a_retry <- roll_diceA()
+    b_retry <- roll_diceB()
+    if (a_retry == b_retry) {
+      return(print("draw")) }
+    else if (a_retry > b_retry) {
+      return(paste(name_a, a)) }
+    else {
+      return(paste(name_b, b)) } }
+  else if (a > b) {
+    return(paste(name_a, a)) }
+  else {
+    return(paste(name_b, b)) }
+}
+max_with_name()
 ```
 
 
 2. Write a second function (you may start by modifying the first one) that takes two names as strings, simulates both of them rolling die 15 times, and returns the name of the person who "won" more rolls. Don't reroll ties this time, but don't count them as "wins". 
 
 ```{r}
-
-
+fifteen <- function() {
+  john <- "John"
+  adam <- "Adam"
+  john_rolls <- sample(1:6, 15, replace = TRUE)
+  adam_rolls <- sample(1:6, 15, replace = TRUE)
+  john_wins <- sum(john_rolls > adam_rolls)
+  adam_wins <- sum(adam_rolls > john_rolls)
+  if (john_wins > adam_wins) {
+    return(john) }
+  else if (adam_wins > john_wins) {
+    return(adam) }
+  else {
+    return("Tie") }
+}
+fifteen()
 ```
 
 
@@ -77,5 +148,60 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 # Your "cheating" function goes here
+fifteen_cheat <- function() {
+  john <- "John"
+  adam <- "Adam"
+  john_rolls <- sample(1:6, 15, replace = TRUE, prob=c(.1,.1,.1,.2,.2,.3))
+  adam_rolls <- sample(1:6, 15, replace = TRUE, prob=c(.95,.01,.01,.01,.01,.01))
+  john_wins <- sum(john_rolls > adam_rolls)
+  adam_wins <- sum(adam_rolls > john_rolls)
+  if (john_wins > adam_wins) {
+    return(john) }
+  else if (adam_wins > john_wins) {
+    return(adam) }
+  else {
+    return("Tie") }
+}
+fifteen_cheat()
 ```
 
+``` {r personal practice}
+# Making basic vectors
+dogs <- c("dachsund", "lab", "pug")
+dogs
+numbers <- c(1,2,3,4,5)
+numbers
+
+# Some ways to work with vectors
+typeof(numbers)
+length(numbers)
+
+# Sequences
+degrees <- seq(0,360)
+count_by_3 <- seq(3, 21, 3)
+count_by_3
+random_decimals <- seq(1, 10, length.out=11)
+random_decimals
+
+# More ways to make a vector
+colon_list <- 1:9
+colon_list
+repeat_func <- rep(5,3)
+repeat_func
+
+# Sampling
+samp <- sample(x=colon_list, size=4, replace=TRUE)
+samp
+samp2 <- sample(x=c("Heads", "Tails"), size=5, replace=TRUE)
+samp2
+unfair_coin <- sample(c("H","T"), 8, replace=TRUE, prob=c(.90, .10))
+unfair_coin
+
+# Cbind and table functions
+die_rolls <- 6:1
+die_rolls
+die_probs <- c(rep(.25, 5), .4)
+die_probs
+cbind(die_rolls, die_probs)
+table(sample(die_rolls, 100, replace=TRUE, prob=die_probs))
+```
